@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Cat Mouse Game</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet"/>
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+    </head>
+    <body onload="ready()">
+        <div id="game" class="container">
+            <h2 class="center">Welcome to our newgame!</h2>
+            <form onsubmit="create()">
+                <input id="name" name="name" type="text" class="form-control" placeholder="Enter your name" required> <br/>
+                <input type="button" class="btn btn-lg btn-primary" value="New Game" onclick="create()">
+            </form>
+            <p style="padding: 15px"></p>
+            <div>
+                <ul id="players" class="list-group">
+                </ul>
+            </div>
+        </div>
+
+        <script>
+            var ready = function() {
+                $.ajax({
+                    url: "players",
+                    dataType: "json",
+                    success: function (players) {
+                        if (length(players) == 0) {
+                            $("#game").textContent = "No Players yet...";
+                        }
+                        players.forEach(function (player, index) {
+                            $('#players').append('<li id=' + index + ' class="list-group-item">' + player.name + '</li>');
+                        });
+                    }
+                });
+            };
+
+            var addplayer = function (index, playername) {
+                $('#players').append('<li id=' + index + ' class="list-group-item">' + playername + '</li>');
+            }
+
+            var create = function () {
+                playername = $("#name").val();
+                console.log(playername);
+                $.ajax({
+                    type: 'POST',
+                    url: 'newplayer',
+                    data: playername,
+                    contentType: 'text/plain',
+                    success: function (result) {
+                        addplayer(result.id, result.name);
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

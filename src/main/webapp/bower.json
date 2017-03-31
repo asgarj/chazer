@@ -1,0 +1,19 @@
+{
+  "name": "catmouse",
+  "authors": [
+    "asgarJ <esger.javadov@gmail.com>"
+  ],
+  "description": "Game of cat catching mouse",
+  "main": "app.js",
+  "moduleType": [],
+  "keywords": [
+    "catmouse",
+    "game"
+  ],
+  "license": "MIT",
+  "homepage": "localhost:2005",
+  "private": true,
+  "dependencies": {
+    "jquery": "~3.2.1"
+  }
+}
