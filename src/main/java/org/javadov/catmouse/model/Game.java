@@ -29,6 +29,11 @@ public class Game {
         this.barrier = new CyclicBarrier(2);
     }
 
+    public static Game create(Player player1, Player player2) {
+        Game game = new Game(player1, player2);
+        return game;
+    }
+
     public Player takeAction(int playerId, int row, int col) {
         Player player = (playerId == player1.getId()) ? player1 : player2;
         player.moveTo(row, col);

@@ -6,9 +6,7 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,21 +19,13 @@ import java.util.Map;
 public class GameService {
     private static Map<Integer, Game> games = new HashMap<>();
 
-    @Context
-    Request request;
-
-    static Game create(Player player1, Player player2) {
-        Game game = new Game(player1, player2);
-        games.put(game.getId(), game);
-        return game;
-    }
-
     // refactor to accept only player id's and generate gameid and send back
     @GET
-    @Path("/{gameId}")
+    @Path("/newgame")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handle(@PathParam("gameId") int gameId) {
-        Game game = games.get(gameId);
+    public Response handle(Player requestor, Player responder) {
+        Game game = Game.create(requestor, responder);
+        games.put(game.getId(), game);
 
         JsonObject player1 = Json.createObjectBuilder()
                 .add("name", game.getPlayer1().getName())
