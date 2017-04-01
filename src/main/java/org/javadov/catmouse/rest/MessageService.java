@@ -1,6 +1,5 @@
 package org.javadov.catmouse.rest;
 
-import org.javadov.catmouse.model.Game;
 import org.javadov.catmouse.model.Message;
 import org.javadov.catmouse.model.Player;
 
@@ -49,22 +48,22 @@ public class MessageService {
     }
 
     @POST
-    @Path("/response")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void newGame(){
-
+    @Path("/response/{messageId}/{responderId}")
+    public void respondToMessage(@PathParam("messageId") int messageId,
+                            @PathParam("responderId") int responderId) {
+        List<Message> receivedMessages = getReceivedMessages(responderId);
+        receivedMessages.stream().forEach(message -> message.setResponse(message.getMessageId() == messageId));
+        return;
     }
 
     @GET
     @Path("/inbox/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response inboxStatus(@PathParam("id") int playerId) {
-        List<Message> unreadMessage = getReceivedMessages(playerId);
-//        Message messageToRespond = unreadMessage.get(0);
-//        Player opponent = messageToRespond.getRequestor();
+        List<Message> receivedMessages = getReceivedMessages(playerId);
         return Response.ok()
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .entity(unreadMessage)
+                .entity(receivedMessages)
                 .build();
     }
 

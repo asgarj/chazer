@@ -1,5 +1,7 @@
 package org.javadov.catmouse.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.net.URI;
 import java.util.Random;
@@ -16,6 +18,7 @@ public class Player {
 
     private int id;
     private final String name;
+    @JsonIgnore
     private State state;
     private boolean idle = true;
     private URI uri;
@@ -110,6 +113,7 @@ public class Player {
         return state;
     }
 
+//    @XmlRootElement
     protected static class State {
         private static Random random = new Random();
         int step, row, col;

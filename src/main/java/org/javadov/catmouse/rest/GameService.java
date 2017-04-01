@@ -20,10 +20,14 @@ public class GameService {
     private static Map<Integer, Game> games = new HashMap<>();
 
     // refactor to accept only player id's and generate gameid and send back
-    @GET
-    @Path("/newgame")
+    @POST
+    @Path("/newgame/{requestorId}/{responderId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handle(Player requestor, Player responder) {
+    public Response handle(@PathParam("requestorId") int requestorId,
+                           @PathParam("responderId") int responderId) {
+        Player requestor = PlayerService.getPlayerById(requestorId);
+        Player responder = PlayerService.getPlayerById(responderId);
+
         Game game = Game.create(requestor, responder);
         games.put(game.getId(), game);
 
