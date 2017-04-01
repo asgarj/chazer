@@ -1,6 +1,7 @@
 package org.javadov.catmouse.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.net.URI;
 import java.util.Random;
 
 /**
@@ -9,8 +10,6 @@ import java.util.Random;
 
 @XmlRootElement
 public class Player {
-    private static final int HEIGHT = 3;
-    private static final int WIDTH = 5;
     private static final int ROWS = 3;
     private static final int COLUMNS = 5;
     private static int counter = 0;
@@ -19,10 +18,15 @@ public class Player {
     private final String name;
     private State state;
     private boolean idle = true;
-
+    private URI uri;
+    private boolean isChaser;
 
     public static Player createPlayer(String name) {
         return new Player(name);
+    }
+
+    public static Player createPlayer(String name, URI uri) {
+        return new Player(name, uri);
     }
 
     private Player(String name) {
@@ -31,14 +35,25 @@ public class Player {
         this.state = new State();
     }
 
+    private Player(String name, URI uri) {
+        this(name);
+        this.uri = uri;
+    }
+
     public void goToInitialState() {
         if (this.id == 1)
             this.state.initialise(true);
         else
             this.state.initialise(false);
     }
+
     public void moveTo(int row, int col) {
         this.state.moveTo(row, col);
+    }
+
+    public boolean validMove(int row, int col, boolean isChaser) {
+        int distance = Math.abs(this.getRow() - row) + Math.abs(this.getColumn() - col);
+        return isChaser ? distance <= 2 : distance <= 1;
     }
 
     @Override
@@ -83,6 +98,18 @@ public class Player {
         return name;
     }
 
+    public boolean isChaser() {
+        return isChaser;
+    }
+
+    public void setChaser(boolean chaser) {
+        isChaser = chaser;
+    }
+
+    public State getState() {
+        return state;
+    }
+
     protected static class State {
         private static Random random = new Random();
         int step, row, col;
@@ -110,8 +137,8 @@ public class Player {
                 this.row = 1;
                 this.col = 1;
             } else {
-                this.row = HEIGHT;
-                this.col = WIDTH;
+                this.row = ROWS;
+                this.col = COLUMNS;
             }
         }
 

@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 /**
  * Created by asgar on 3/26/17.
  */
-public class GameTest {
+public class GameDeprecatedTest {
     private Logger logger;
     @Before
     public void setUp() throws Exception {

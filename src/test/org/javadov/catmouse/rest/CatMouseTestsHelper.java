@@ -9,7 +9,7 @@ import java.util.logging.Logger;
  */
 public class CatMouseTestsHelper {
     public static final String FILENAME = "game.log";
-    private static Logger logger = Logger.getLogger("Cat-Mouse-Game");
+    private static Logger logger = Logger.getLogger("Cat-Mouse-GameDeprecated");
     static {
         try {
             logger.addHandler(new FileHandler(FILENAME, true));

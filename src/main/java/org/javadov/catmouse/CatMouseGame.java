@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * Created by asgar on 3/23/17.
  */
 public final class CatMouseGame {
-    public static final Logger logger = Logger.getLogger("Cat-Mouse-Game");
+    public static final Logger logger = Logger.getLogger("Cat-Mouse-GameDeprecated");
     public static final String FILENAME = "newgame.log";
 
     private static final String SERVER_ADDRESS = "http://localhost";

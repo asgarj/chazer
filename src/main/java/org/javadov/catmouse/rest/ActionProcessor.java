@@ -33,7 +33,7 @@ public class ActionProcessor {
             if (player.equals(otherPlayer)) {
                 gameOver();
                 return "newgame over";
-//                return Response.status(201).entity("Game Over").build();
+//                return Response.status(201).entity("GameDeprecated Over").build();
             } else {
                 return "moved";
 //                return Response.ok().build();

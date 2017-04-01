@@ -15,7 +15,7 @@ import static org.javadov.catmouse.CatMouseGame.logger;
  */
 
 @Path("/")
-public class Game {
+public class GameDeprecated {
     private static final List<Player> players = new ArrayList<>();
 
 //    @GET
