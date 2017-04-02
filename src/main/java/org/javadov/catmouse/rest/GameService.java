@@ -48,9 +48,11 @@ public class GameService {
         jsonBuilder.add("player2", player2);
         jsonBuilder.add("chaser", game.getPlayer1().isChaser() ? 1 : 2);
 
+        String jsonString = jsonBuilder.build().toString();
+
         return Response
                 .status(Response.Status.CREATED)
-                .entity(jsonBuilder.build())
+                .entity(jsonString)
                 .build();
     }
 

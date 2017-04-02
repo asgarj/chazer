@@ -11,6 +11,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
+import java.io.StringReader;
+
 import static org.junit.Assert.*;
 
 /**
@@ -20,15 +22,26 @@ public class GameServiceTest {
     final String BASE_URL = "http://localhost:2005/games";
 
     @Test
+    public void testJson() {
+        JsonObject json = Json.createObjectBuilder()
+                .add("id", 1)
+                .add("name", "Asgar")
+                .build();
+        String jsonStr = json.toString();
+        System.out.println(json);
+    }
+
+    @Test
     public void handle() throws Exception {
-        CatMouseTestsHelper.addDummyPlayers();
+        //CatMouseTestsHelper.addDummyPlayers();
         Client client = ClientBuilder.newClient();
         WebTarget webTarget = client.target(UriBuilder.fromUri(BASE_URL).build()).path("newgame/1/2");
         Response response = webTarget.request(MediaType.APPLICATION_JSON_TYPE).post(null);
         assertEquals(201, response.getStatus());
-        Object obj = response.getEntity();
-        JsonObject json = (JsonObject) response.getEntity();
-        assertTrue(json.getInt("gameId") != 0);
+        String jsonString = response.readEntity(String.class);
+        JsonObject json = Json.createReader(new StringReader(jsonString)).readObject();
+        int gameId = json.getInt("gameId");
+        assertTrue(gameId != 0);
         int chaser = json.getInt("chaser");
         assertTrue(chaser == 1 || chaser == 2);
     }
