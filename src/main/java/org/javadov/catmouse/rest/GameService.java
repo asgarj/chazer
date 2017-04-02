@@ -77,9 +77,7 @@ public class GameService {
                     "Congrats! You caught your opponent!" :
                     "Oh.. Your opponent caught you :(";
             String responseJsonString = Json.createObjectBuilder()
-                    .add("message", message)
-                    .build()
-                    .toString();
+                    .add("message", message).build().toString();
             return Response.ok()
                     .header("state", "game over")
                     .entity(responseJsonString)
