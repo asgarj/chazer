@@ -7,10 +7,12 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
+import javax.json.JsonValue;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,17 +64,25 @@ public class GameService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response moveTo(@PathParam("gameId") int gameId,
                            @PathParam("playerId") int playerId,
-                           JsonObject json) {
+                           String jsonString) {
         Game game = games.get(gameId);
+
+        JsonObject json = Json.createReader(new StringReader(jsonString)).readObject();
         int row = json.getInt("row");
         int col = json.getInt("col");
+
         Player player = game.takeAction(playerId, row, col);
         if (game.isOver()) {
+            String message = (player.isChaser()) ?
+                    "Congrats! You caught your opponent!" :
+                    "Oh.. Your opponent caught you :(";
+            String responseJsonString = Json.createObjectBuilder()
+                    .add("message", message)
+                    .build()
+                    .toString();
             return Response.ok()
                     .header("state", "game over")
-                    .entity((player.isChaser()) ?
-                            "Congrats! You caught your opponent!" :
-                            "Oh.. Your opponent caught you :(")
+                    .entity(responseJsonString)
                     .build();
         } else {
             return Response.ok(game).build();
