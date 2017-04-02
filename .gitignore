@@ -5,4 +5,5 @@ catmousegame.iml
 *.log
 run.sh 
 *.log.lck
+*.iml
 
