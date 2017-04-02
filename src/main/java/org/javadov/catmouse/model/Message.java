@@ -43,7 +43,7 @@ public class Message {
         return responder;
     }
 
-    public boolean getResponse() {
+    public boolean respond() {
         CompletableFuture<Void> res = CompletableFuture.runAsync(() -> {
             while (response == OpponentResponse.NONE)
                 try {

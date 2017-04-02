@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Path("/messages")
 public class MessageService {
-    private List<Message> messages = new ArrayList<>();
+    private static List<Message> messages = new ArrayList<>();
 
     @Context UriInfo uriInfo;
 
@@ -29,12 +29,13 @@ public class MessageService {
         Message message = Message.createMessage(requestor, responder);
         if (message != null) {
             messages.add(message);
-            boolean playWithRequestor = message.getResponse();
+            boolean playWithRequestor = message.respond();
             if (playWithRequestor) {
                 response = Response
-                        .temporaryRedirect(UriBuilder.fromPath("/newgame").build())
-                        .entity(requestor)
-                        .entity(responder)
+                        .temporaryRedirect(UriBuilder.fromPath("/newgame")
+                                .path("" + requestorId)
+                                .path("" + responderId)
+                                .build())
                         .build();
             } else {
                 response = Response.status(Response.Status.FORBIDDEN)
