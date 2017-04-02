@@ -2,7 +2,6 @@ package org.javadov.catmouse;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -19,8 +18,8 @@ import java.util.logging.Logger;
  * Created by asgar on 3/23/17.
  */
 public final class CatMouseGame {
-    public static final Logger logger = Logger.getLogger("Cat-Mouse-GameDeprecated");
-    public static final String FILENAME = "newgame.log";
+    public static final Logger logger = Logger.getLogger("Chazzer-Game");
+    public static final String FILENAME = "game.log";
 
     private static final String SERVER_ADDRESS = "http://localhost";
     private static final int SERVER_PORT = 2005;

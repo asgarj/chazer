@@ -22,7 +22,6 @@ import java.util.Map;
 public class GameService {
     private static Map<Integer, Game> games = new HashMap<>();
 
-    // refactor to generate ADD gameid and send back
     @POST
     @Path("/newgame/{requestorId}/{responderId}")
     @Produces(MediaType.APPLICATION_JSON)
