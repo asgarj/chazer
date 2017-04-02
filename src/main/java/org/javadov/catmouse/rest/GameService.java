@@ -1,25 +1,28 @@
 package org.javadov.catmouse.rest;
+
 import org.javadov.catmouse.model.Game;
 import org.javadov.catmouse.model.Player;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by asgar on 4/1/17.
  */
-// The Java class will be hosted at the URI path "/helloworld"
+
 @Path("/games")
 public class GameService {
     private static Map<Integer, Game> games = new HashMap<>();
 
-    // refactor to accept only player id's and generate gameid and send back
+    // refactor to generate ADD gameid and send back
     @POST
     @Path("/newgame/{requestorId}/{responderId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -41,6 +44,7 @@ public class GameService {
                 .build();
 
         JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
+        jsonBuilder.add("gameId", game.getId());
         jsonBuilder.add("player1", player1);
         jsonBuilder.add("player2", player2);
         jsonBuilder.add("chaser", game.getPlayer1().isChaser() ? 1 : 2);
