@@ -31,7 +31,7 @@ public class MessageService {
             boolean playWithRequestor = message.respond();
             if (playWithRequestor) {
                 response = Response
-                        .temporaryRedirect(UriBuilder.fromPath("/newgame")
+                        .temporaryRedirect(UriBuilder.fromPath("/games/newgame")
                                 .path("" + requestorId)
                                 .path("" + responderId)
                                 .build())
@@ -41,6 +41,7 @@ public class MessageService {
                         .header("reason", "The opponent is not able to play at the moment.")
                         .build();
             }
+            messages.remove(message);
         } else {
             response = Response.status(Response.Status.PRECONDITION_FAILED).build();
         }
