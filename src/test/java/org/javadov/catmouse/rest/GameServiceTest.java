@@ -36,7 +36,7 @@ public class GameServiceTest {
         //CatMouseTestsHelper.addDummyPlayers();
         Client client = ClientBuilder.newClient();
         WebTarget webTarget = client.target(UriBuilder.fromUri(BASE_URL).build()).path("newgame/1/2");
-        Response response = webTarget.request(MediaType.APPLICATION_JSON_TYPE).post(null);
+        Response response = webTarget.request(MediaType.APPLICATION_JSON_TYPE).get();
         assertEquals(201, response.getStatus());
         String jsonString = response.readEntity(String.class);
         JsonObject json = Json.createReader(new StringReader(jsonString)).readObject();
