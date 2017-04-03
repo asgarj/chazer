@@ -44,6 +44,7 @@ public class Player {
     }
 
     public void initialise() {
+        this.isChaser = false;
         this.state.initialise();
     }
 

@@ -30,6 +30,8 @@ public class Game {
     }
 
     public static Game create(Player player1, Player player2) {
+        player1.initialise();
+        player2.initialise();
         Game game = new Game(player1, player2);
         return game;
     }
