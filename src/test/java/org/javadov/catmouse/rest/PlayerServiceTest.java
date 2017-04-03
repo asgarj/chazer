@@ -1,6 +1,5 @@
 package org.javadov.catmouse.rest;
 
-import org.javadov.catmouse.model.Player;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,7 +10,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
-
 import java.util.logging.Logger;
 
 import static org.javadov.catmouse.rest.CatMouseTestsHelper.getLogger;

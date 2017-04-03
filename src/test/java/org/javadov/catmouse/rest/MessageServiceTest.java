@@ -1,7 +1,5 @@
 package org.javadov.catmouse.rest;
 
-import java.util.List;
-
 import org.javadov.catmouse.model.Message;
 import org.junit.Test;
 
@@ -11,9 +9,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.util.List;
 
 /**
  * Created by ajavadov on 4/1/2017.

@@ -1,25 +1,28 @@
 package org.javadov.catmouse.rest;
 
+import org.junit.Test;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
+import java.io.InputStream;
+import java.util.logging.*;
 
 /**
  * Created by asgar on 3/29/17.
  */
 public class CatMouseTestsHelper {
-    public static final String FILENAME = "game.log";
-    private static Logger logger = Logger.getLogger("Cat-Mouse-GameDeprecated");
+    private static final String LOG_TEST_FILE = "/logging.properties";
+    private static Logger logger = Logger.getLogger("Cat-Mouse-Game-Test");
+
     static {
-        try {
-            logger.addHandler(new FileHandler(FILENAME, true));
+        try (InputStream is = CatMouseTestsHelper.class.getResourceAsStream(LOG_TEST_FILE)){
+            LogManager.getLogManager().readConfiguration(is);
+            logger.addHandler(new FileHandler());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,5 +41,12 @@ public class CatMouseTestsHelper {
             target.request(MediaType.APPLICATION_JSON_TYPE)
                     .post(Entity.entity(PLAYER_NAME, MediaType.TEXT_PLAIN_TYPE));
         }
+    }
+    @Test
+    public void testLoggerFormatter() throws IOException {
+        logger.info("Info message");
+        logger.finest("finest message");
+        logger.log(Level.WARNING, "warning message");
+        logger.log(Level.FINE, "fine message");
     }
 }
