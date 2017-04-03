@@ -13,10 +13,11 @@ import java.util.concurrent.TimeoutException;
 @XmlRootElement
 public class Message {
     private static int counter = 0;
+
     private final int messageId;
-    Player requestor;
-    Player responder;
-    OpponentResponse response;
+    private Player requestor;
+    private Player responder;
+    private OpponentResponse response;
 
     private Message(Player requestor, Player receiver) {
         this.messageId = ++counter;
@@ -35,10 +36,6 @@ public class Message {
         return messageId;
     }
 
-    public Player getRequestor() {
-        return requestor;
-    }
-
     public Player getResponder() {
         return responder;
     }
@@ -54,7 +51,7 @@ public class Message {
         try {
             res.get(10, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//            e.printStackTrace();
+            // todo: log this
         }
         return response == OpponentResponse.ACCEPTED;
     }
