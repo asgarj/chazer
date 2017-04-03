@@ -24,7 +24,7 @@ import java.util.Map;
 public class GameService {
     private static Map<Integer, Game> games = new HashMap<>();
 
-    @POST
+    @GET
     @Path("/newgame/{requestorId}/{responderId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response handle(@PathParam("requestorId") int requestorId,
@@ -78,6 +78,7 @@ public class GameService {
                     "Oh.. Your opponent caught you :(";
             String responseJsonString = Json.createObjectBuilder()
                     .add("message", message).build().toString();
+            games.remove(game.getId());
             return Response.ok()
                     .header("state", "game over")
                     .entity(responseJsonString)
