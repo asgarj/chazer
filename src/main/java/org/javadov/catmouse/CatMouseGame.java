@@ -8,18 +8,20 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
+import sun.rmi.runtime.Log;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
+import java.util.Properties;
+import java.util.logging.*;
 
 /**
  * Created by asgar on 3/23/17.
  */
 public final class CatMouseGame {
+    public static final String LOGGER_CONFIG = "/logging.properties";
     public static final Logger logger = Logger.getLogger("Chazzer-Game");
-    public static final String FILENAME = "game.log";
 
     private static final String SERVER_ADDRESS = "http://localhost";
     private static final int SERVER_PORT = 2005;
@@ -32,11 +34,13 @@ public final class CatMouseGame {
 //        URI baseUri = UriBuilder.fromUri(SERVER_ADDRESS).port(SERVER_PORT).build();
 //        ResourceConfig config = new ResourceConfig(ActionProcessor.class);
 //        Server server = JettyHttpContainerFactory.createServer(baseUri, config);
-        try {
-            logger.addHandler(new FileHandler(FILENAME, true));
+        try (InputStream is = CatMouseGame.class.getResourceAsStream(LOGGER_CONFIG)){
+            LogManager.getLogManager().readConfiguration(is);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        logger.addHandler(new FileHandler());
+        logger.info("Info message");
 
         ResourceConfig config = new ResourceConfig();
         config.packages("org.javadov.catmouse.rest");
