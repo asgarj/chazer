@@ -54,7 +54,7 @@ public class Player {
         this.state.moveTo(row, col);
     }
 
-    public boolean validMove(int row, int col, boolean isChaser) {
+    public boolean validMove(int row, int col) {
         int distance = Math.abs(this.getRow() - row) + Math.abs(this.getColumn() - col);
         return isChaser ? distance <= 2 : distance <= 1;
     }
@@ -113,7 +113,6 @@ public class Player {
         return state;
     }
 
-//    @XmlRootElement
     protected static class State {
         private static Random random = new Random();
         int step, row, col;
