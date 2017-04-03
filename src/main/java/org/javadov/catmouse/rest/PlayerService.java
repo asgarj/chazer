@@ -19,7 +19,6 @@ import javax.ws.rs.core.UriInfo;
 @Path("/players")
 public class PlayerService {
     private static final List<Player> players = new ArrayList<>();
-    private static int counter = 0;
 
     @Context UriInfo uriInfo;
 
@@ -29,16 +28,12 @@ public class PlayerService {
     public Player createPlayer(String name) {
         Player newPlayer = Player.createPlayer(name, uriInfo.getRequestUri());
         players.add(newPlayer);
-        logger.info("CREATE PLAYER REQUEST: " + name);
-        logger.info(players.toString());
-        logger.info(uriInfo.toString());
         return newPlayer;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getActivePlayers() {
-        logger.info(++counter + " : request received");
         return Response.ok(players, MediaType.APPLICATION_JSON_TYPE).build();
     }
 

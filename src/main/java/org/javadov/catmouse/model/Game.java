@@ -1,5 +1,7 @@
 package org.javadov.catmouse.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
@@ -12,8 +14,9 @@ import java.util.concurrent.CyclicBarrier;
 
 @XmlRootElement
 public class Game {
+    @JsonIgnore
     private static int counter = 0;
-
+    @JsonIgnore
     private final CyclicBarrier barrier;
 
     private final int id;
@@ -25,7 +28,6 @@ public class Game {
         this.player1 = player1;
         this.player2 = player2;
         this.player1.setChaser(true);
-
         this.barrier = new CyclicBarrier(2);
     }
 
