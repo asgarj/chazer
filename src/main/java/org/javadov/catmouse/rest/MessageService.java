@@ -10,19 +10,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by asgar on 3/31/17.
+ * Handles game request messages
+ * @author asgar on 3/31/17.
  */
 
 @Path("/messages")
 public class MessageService {
     private static List<Message> messages = new ArrayList<>();
 
-    @Context UriInfo uriInfo;
-
     @GET
-    @Path("/request/{source}/{destination}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response requestGame(@PathParam("source") int requestorId, @PathParam("destination") int responderId) {
+    @Path("/request/{requestorId}/{responderId}")
+    public Response requestGame(@PathParam("requestorId") int requestorId,
+                                @PathParam("responderId") int responderId) {
         Response response;
         Player requestor = PlayerService.getPlayerById(requestorId);
         Player responder = PlayerService.getPlayerById(responderId);
@@ -53,8 +52,7 @@ public class MessageService {
     public void respondToMessage(@PathParam("messageId") int messageId,
                             @PathParam("responderId") int responderId) {
         List<Message> receivedMessages = getReceivedMessages(responderId);
-        receivedMessages.stream().forEach(message -> message.setResponse(message.getMessageId() == messageId));
-        return;
+        receivedMessages.forEach(message -> message.setResponse(message.getMessageId() == messageId));
     }
 
     @GET
@@ -69,7 +67,7 @@ public class MessageService {
     }
 
     private List<Message> getReceivedMessages(int playerId) {
-        List<Message> unreadMessages = this.messages.stream()
+        List<Message> unreadMessages = messages.stream()
                 .filter(m -> m.getResponder().getId() == playerId)
                 .collect(Collectors.toList());
         return unreadMessages;
