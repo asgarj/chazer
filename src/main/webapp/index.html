@@ -45,7 +45,7 @@
                 console.log(playername);
                 $.ajax({
                     type: 'POST',
-                    url: 'newplayer',
+                    url: 'players',
                     data: playername,
                     contentType: 'text/plain',
                     success: function (result) {

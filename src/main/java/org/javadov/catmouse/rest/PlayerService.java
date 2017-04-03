@@ -16,14 +16,13 @@ import javax.ws.rs.core.UriInfo;
 /**
  * Created by asgar on 3/29/17.
  */
-@Path("/")
+@Path("/players")
 public class PlayerService {
     private static final List<Player> players = new ArrayList<>();
     private static int counter = 0;
 
     @Context UriInfo uriInfo;
 
-    @Path("/newplayer")
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
@@ -36,7 +35,6 @@ public class PlayerService {
         return newPlayer;
     }
 
-    @Path("/players")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getActivePlayers() {
