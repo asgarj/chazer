@@ -9,10 +9,12 @@
     <body onload="ready()">
         <div id="game" class="container">
             <h2 class="center">Welcome to our newgame!</h2>
-            <form onsubmit="create()">
-                <input id="name" name="name" type="text" class="form-control" placeholder="Enter your name" required> <br/>
-                <input type="button" class="btn btn-lg btn-primary" value="New Game" onclick="create()">
-            </form>
+            <!-- <div class="row"> -->
+	            <form onsubmit="create()">
+	                <input id="name" name="name" type="text" class="form-control" placeholder="Enter your name" required> <br/>
+	                <input type="button" class="btn btn-lg btn-primary" value="New Game" onclick="create()">
+	            </form>
+            <!-- </div> -->
             <p style="padding: 15px"></p>
             <div>
                 <ul id="players" class="list-group">
