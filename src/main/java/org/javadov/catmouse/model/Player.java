@@ -43,11 +43,8 @@ public class Player {
         this.uri = uri;
     }
 
-    public void goToInitialState() {
-        if (this.id == 1)
-            this.state.initialise(true);
-        else
-            this.state.initialise(false);
+    public void initialise() {
+        this.state.initialise();
     }
 
     public void moveTo(int row, int col) {
@@ -134,15 +131,10 @@ public class Player {
             return;
         }
 
-        public void initialise(boolean topLeft) {
+        public void initialise() {
             this.step = 0;
-            if (topLeft) {
-                this.row = 1;
-                this.col = 1;
-            } else {
-                this.row = ROWS;
-                this.col = COLUMNS;
-            }
+            this.row = random.nextInt(ROWS) + 1;
+            this.col = random.nextInt(COLUMNS) + 1;
         }
 
         @Override
