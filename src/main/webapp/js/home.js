@@ -34,8 +34,8 @@ var requestGame = function (opponentId) {
         type: 'GET',
         dataType: 'json',
         success: function(data, status) {
-            console.log(data["id"]);
-            window.location.href = '/games?gameid=' + data["id"];
+            console.log(data.id);
+            window.location = '/games/index.html?gameId=' + data.id;
         },
         error: function(xhr, status, errorThrown) {
             console.log("xhr.status: " + xhr.status);
