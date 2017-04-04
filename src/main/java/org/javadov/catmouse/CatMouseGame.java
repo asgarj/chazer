@@ -40,7 +40,6 @@ public final class CatMouseGame {
             e.printStackTrace();
         }
         logger.addHandler(new FileHandler());
-        logger.info("Info message");
 
         ResourceConfig config = new ResourceConfig();
         config.packages("org.javadov.catmouse.rest");

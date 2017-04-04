@@ -2,15 +2,17 @@ package org.javadov.catmouse.rest;
 
 import org.javadov.catmouse.model.Game;
 import org.javadov.catmouse.model.Player;
+import static org.javadov.catmouse.CatMouseGame.logger;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
-import javax.json.JsonValue;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import java.io.StringReader;
 import java.util.HashMap;
@@ -27,13 +29,15 @@ public class GameService {
     @GET
     @Path("/newgame/{requestorId}/{responderId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handle(@PathParam("requestorId") int requestorId,
+    public Game handle(@PathParam("requestorId") int requestorId,
                            @PathParam("responderId") int responderId) {
         Player requestor = PlayerService.getPlayerById(requestorId);
         Player responder = PlayerService.getPlayerById(responderId);
 
         Game game = Game.create(requestor, responder);
         games.put(game.getId(), game);
+        logger.info(String.format("Created new game for players %d - %d with id:%d",
+                requestorId, responderId, game.getId()));
 
         JsonObject player1 = Json.createObjectBuilder()
                 .add("name", game.getPlayer1().getName())
@@ -51,12 +55,19 @@ public class GameService {
         jsonBuilder.add("chaser", game.getPlayer1().isChaser() ? 1 : 2);
 
         String jsonString = jsonBuilder.build().toString();
+        logger.info(String.format("Game: %d response: %s", game.getId(), jsonString));
 
-        return Response
-                .status(Response.Status.CREATED)
-                .entity(jsonString)
-                .build();
+        return game;
     }
+
+    @GET
+    @Path("/{gameId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Game getGame(@PathParam("gameId") int gameId) {
+        logger.fine(String.format("GET game [%d]", gameId));
+        return games.get(gameId);
+    }
+
 
     @POST
     @Path("/{gameId}/{playerId}")
