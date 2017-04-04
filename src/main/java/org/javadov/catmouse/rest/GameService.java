@@ -9,8 +9,10 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import java.io.StringReader;
 import java.util.HashMap;
@@ -34,7 +36,8 @@ public class GameService {
 
         Game game = Game.create(requestor, responder);
         games.put(game.getId(), game);
-        logger.info(String.format("Created new game for players %d - %d with id:%d", requestorId, responderId, game.getId()));
+        logger.info(String.format("Created new game for players %d - %d with id:%d",
+                requestorId, responderId, game.getId()));
 
         JsonObject player1 = Json.createObjectBuilder()
                 .add("name", game.getPlayer1().getName())
@@ -56,6 +59,15 @@ public class GameService {
 
         return game;
     }
+
+    @GET
+    @Path("/{gameId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Game getGame(@PathParam("gameId") int gameId) {
+        logger.fine(String.format("GET game [%d]", gameId));
+        return games.get(gameId);
+    }
+
 
     @POST
     @Path("/{gameId}/{playerId}")
