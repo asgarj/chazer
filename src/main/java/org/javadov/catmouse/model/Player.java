@@ -12,24 +12,18 @@ import java.util.Random;
 
 @XmlRootElement
 public class Player {
-    private static final int ROWS = 3;
-    private static final int COLUMNS = 5;
+    public static int ROWS;
+    public static int COLUMNS;
     private static int counter = 0;
 
     private int id;
     private final String name;
     @JsonIgnore
     private State state;
-    private boolean idle = true;
-    private URI uri;
     private boolean isChaser;
 
     public static Player createPlayer(String name) {
         return new Player(name);
-    }
-
-    public static Player createPlayer(String name, URI uri) {
-        return new Player(name, uri);
     }
 
     private Player(String name) {
@@ -38,14 +32,9 @@ public class Player {
         this.state = new State();
     }
 
-    private Player(String name, URI uri) {
-        this(name);
-        this.uri = uri;
-    }
-
-    public void initialise() {
+    public void initialise(Player otherThan) {
         this.isChaser = false;
-        this.state.initialise();
+        this.state.initialise(otherThan == null ? null : otherThan.getState());
     }
 
     public void moveTo(int row, int col) {
@@ -132,10 +121,18 @@ public class Player {
             return;
         }
 
-        public void initialise() {
+        public void initialise(State otherThan) {
             this.step = 0;
             this.row = random.nextInt(ROWS) + 1;
             this.col = random.nextInt(COLUMNS) + 1;
+
+            if (otherThan != null && this.equals(otherThan)) {
+                this.row = (this.row < ROWS) ? ROWS : 1;
+            }
+        }
+
+        public int getStep() {
+            return step;
         }
 
         @Override

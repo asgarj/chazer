@@ -20,22 +20,22 @@ public class Game {
     private final CyclicBarrier barrier;
 
     private final int id;
-    private Player player1;
-    private Player player2;
+    private final Player player1;
+    private final Player player2;
 
-    public Game(Player player1, Player player2) {
+    public static Game create(Message message) {
+        return new Game(message.getRequestor(), message.getResponder());
+    }
+
+    private Game(Player player1, Player player2) {
         this.id = ++counter;
         this.player1 = player1;
         this.player2 = player2;
-        this.player1.setChaser(true);
         this.barrier = new CyclicBarrier(2);
-    }
 
-    public static Game create(Player player1, Player player2) {
-        player1.initialise();
-        player2.initialise();
-        Game game = new Game(player1, player2);
-        return game;
+        this.player1.initialise(null);
+        this.player2.initialise(this.player1);
+        this.player1.setChaser(true);
     }
 
     public Player takeAction(int playerId, int row, int col) {
@@ -64,5 +64,9 @@ public class Game {
 
     public Player getPlayer2() {
         return player2;
+    }
+
+    public int nSteps() {
+        return player1.getState().getStep();
     }
 }

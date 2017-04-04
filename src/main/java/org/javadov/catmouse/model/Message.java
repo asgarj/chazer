@@ -36,6 +36,10 @@ public class Message {
         return messageId;
     }
 
+    public Player getRequestor() {
+        return requestor;
+    }
+
     public Player getResponder() {
         return responder;
     }

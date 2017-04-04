@@ -8,6 +8,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
+import org.javadov.catmouse.model.Player;
 import sun.rmi.runtime.Log;
 
 import java.io.IOException;
@@ -21,10 +22,11 @@ import java.util.logging.*;
  */
 public final class CatMouseGame {
     public static final String LOGGER_CONFIG = "/logging.properties";
+    public static final String APP_CONFIG = "/config.properties";
     public static final Logger logger = Logger.getLogger("Chazzer-Game");
 
     private static final String SERVER_ADDRESS = "http://localhost";
-    private static final int SERVER_PORT = 2005;
+    private static int SERVER_PORT;
 
 //    public CatMouseGame() {
 //        packages("org.javadov.catmouse");
@@ -39,7 +41,17 @@ public final class CatMouseGame {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        logger.setUseParentHandlers(false);
         logger.addHandler(new FileHandler());
+        
+        try (InputStream is = CatMouseGame.class.getResourceAsStream(APP_CONFIG)) {
+            Properties props = new Properties();
+            props.load(is);
+            SERVER_PORT = Integer.valueOf(props.getProperty("PORT"));
+            Player.ROWS = Integer.valueOf(props.getProperty("ROWS"));
+            Player.COLUMNS = Integer.valueOf(props.getProperty("COLUMNS"));
+            logger.log(Level.INFO, String.format("Game board size is [%d]x[%d]", Player.ROWS, Player.COLUMNS));
+        }
 
         ResourceConfig config = new ResourceConfig();
         config.packages("org.javadov.catmouse.rest");

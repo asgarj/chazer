@@ -1,12 +1,17 @@
 package org.javadov.catmouse.rest;
 
+import org.javadov.catmouse.model.Game;
 import org.javadov.catmouse.model.Message;
 import org.javadov.catmouse.model.Player;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+
+import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -24,32 +29,27 @@ public class MessageService {
     @Path("/request/{requestorId}/{responderId}")
     public Response requestGame(@PathParam("requestorId") int requestorId,
                                 @PathParam("responderId") int responderId) {
-        logger.fine(String.format("reqId:%d, resId:%d", requestorId, responderId));
         Response response;
         Player requestor = PlayerService.getPlayerById(requestorId);
         Player responder = PlayerService.getPlayerById(responderId);
         Message message = Message.createMessage(requestor, responder);
         if (message != null) {
-            logger.info("Message created with id: " + message.getMessageId());
+            logger.log(Level.FINE, format("Message created [%d]", message.getMessageId()));
             messages.add(message);
             boolean playWithRequestor = message.respond();
-            logger.info(String.format("Response for message:%d is %s", message.getMessageId(),
-                    playWithRequestor ? "YES" : "NO"));
             if (playWithRequestor) {
-                logger.info("playWithRequestor: " + playWithRequestor);
+                logger.log(Level.FINE, format("CHALLENGE [%d] ACCEPTED!", message.getMessageId()));
                 response = Response
-                        .temporaryRedirect(UriBuilder.fromPath("/games/newgame")
-                                .path("" + requestorId)
-                                .path("" + responderId)
+                        .temporaryRedirect(UriBuilder.fromPath("/games/new")
+                                .path("" + message.getMessageId())
                                 .build())
                         .build();
-                logger.info(response.toString());
             } else {
+                logger.log(Level.FINE, format("CHALLENGE [%d] REJECTED!", message.getMessageId()));
                 response = Response.status(Response.Status.FORBIDDEN)
                         .header("reason", "The opponent is not able to play at the moment.")
                         .build();
             }
-            messages.remove(message);
         } else {
             response = Response.status(Response.Status.PRECONDITION_FAILED).build();
         }
@@ -57,12 +57,20 @@ public class MessageService {
     }
 
     @POST
-    @Path("/response/{messageId}/{responderId}")
-    public void respondToMessage(@PathParam("messageId") int messageId,
+    @Path("/respond/{messageId}/{responderId}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response respondToMessage(@PathParam("messageId") int messageId,
                             @PathParam("responderId") int responderId) {
-        logger.info(String.format("Player: %d responded to message: %d", responderId, messageId));
         List<Message> receivedMessages = getReceivedMessages(responderId);
-        receivedMessages.forEach(message -> message.setResponse(message.getMessageId() == messageId));
+        Optional<Message> message = receivedMessages.stream().filter(m -> m.getMessageId() == messageId).findFirst();
+        if (message.isPresent()) {
+            message.get().setResponse(true);
+            Game newgame = GameService.getGameByMessageId(messageId);
+            if (newgame != null) {
+                return Response.ok(newgame.getId(), MediaType.TEXT_PLAIN_TYPE).build();
+            }
+        }
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @GET
@@ -77,9 +85,12 @@ public class MessageService {
     }
 
     private List<Message> getReceivedMessages(int playerId) {
-        List<Message> unreadMessages = messages.stream()
+        return messages.stream()
                 .filter(m -> m.getResponder().getId() == playerId)
                 .collect(Collectors.toList());
-        return unreadMessages;
+    }
+
+    public static Message getMessageById(int id) {
+        return messages.stream().filter(m -> m.getMessageId() == id).findFirst().get();
     }
 }
