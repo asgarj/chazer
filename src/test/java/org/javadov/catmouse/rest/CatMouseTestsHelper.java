@@ -32,11 +32,23 @@ public class CatMouseTestsHelper {
         return logger;
     }
 
+    @Test
+    public void generatePlayer() {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(UriBuilder.fromUri("http://localhost:2005")).path("players");
+
+        final String[] PLAYER_NAMES = {"Comp", "iPhone"};
+        for(String PLAYER_NAME: PLAYER_NAMES) {
+            target.request(MediaType.APPLICATION_JSON_TYPE)
+                    .post(Entity.entity(PLAYER_NAME, MediaType.TEXT_PLAIN_TYPE));
+        }
+    }
+
     public static void addDummyPlayers() {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(UriBuilder.fromUri("http://localhost:2005")).path("newplayer");
 
-        final String[] PLAYER_NAMES = {"Asgar", "Yegana", "Other"};
+        final String[] PLAYER_NAMES = {"Comp", "iPhone"};
         for(String PLAYER_NAME: PLAYER_NAMES) {
             target.request(MediaType.APPLICATION_JSON_TYPE)
                     .post(Entity.entity(PLAYER_NAME, MediaType.TEXT_PLAIN_TYPE));
