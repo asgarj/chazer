@@ -3,7 +3,9 @@ package org.javadov.catmouse.rest;
 import org.javadov.catmouse.model.Player;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +21,13 @@ public class PlayerService {
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Player createPlayer(String name) {
+    public Response createPlayer(String name) {
         Player newPlayer = Player.createPlayer(name);
         players.add(newPlayer);
-        return newPlayer;
+        NewCookie cookie = new NewCookie("playerId", "" + newPlayer.getId());
+        return Response.ok(newPlayer, MediaType.APPLICATION_JSON_TYPE)
+                .cookie(cookie)
+                .build();
     }
 
     @GET
