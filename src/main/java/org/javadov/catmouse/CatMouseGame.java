@@ -43,7 +43,7 @@ public final class CatMouseGame {
         }
         logger.setUseParentHandlers(false);
         logger.addHandler(new FileHandler());
-        
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> logger.severe(e.getMessage()));
         try (InputStream is = CatMouseGame.class.getResourceAsStream(APP_CONFIG)) {
             Properties props = new Properties();
             props.load(is);

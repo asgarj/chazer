@@ -43,3 +43,17 @@ var addplayer = function (player) {
         '</li>';
     $('#players').append(listItem);
 };
+
+(function() {
+    var cookie = document.cookie;
+    if (cookie != "") {
+        cookie.split(";").forEach(function (c) {
+            var pos = c.indexOf("playerId");
+            if (pos > -1) {
+                myPlayerId = c.split("=")[1].trim();
+                console.log("myPlayerId read from cookie:_"+myPlayerId+"_");
+                return;
+            }
+        });
+    }
+})();

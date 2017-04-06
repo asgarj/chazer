@@ -13,11 +13,11 @@ function generateRow(row, rowId, nCols) {
 	for (var i=0; i<nCols; i++) {
 		var cell = row.insertCell(i);
 		cell.id = rowId + ":" + (i+1);
-        cell.addEventListener('click', clickMethod);
+        cell.addEventListener('click', move);
 	}
 }
 
-function clickMethod(event) {
+function move(event) {
     var me = (myId == player1.id) ? player1 : player2;
     var row = parseInt(event.srcElement.id.split(":")[0]);
     var col = parseInt(event.srcElement.id.split(":")[1]);
@@ -56,6 +56,11 @@ function clickMethod(event) {
                 error: function(err) {
                     console.log("invalid request");
                     console.log(err.status);
+                },
+                statusCode : {
+                    403: function() {
+                        alert("your opponent hasn't taken action yet wait for him to take action");
+                    }
                 }
             });
 }

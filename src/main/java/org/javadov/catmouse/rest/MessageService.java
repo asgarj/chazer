@@ -49,6 +49,7 @@ public class MessageService {
                 response = Response.status(Response.Status.FORBIDDEN)
                         .header("reason", "The opponent is not able to play at the moment.")
                         .build();
+                dispose(message);
             }
         } else {
             response = Response.status(Response.Status.PRECONDITION_FAILED).build();
@@ -92,5 +93,9 @@ public class MessageService {
 
     public static Message getMessageById(int id) {
         return messages.stream().filter(m -> m.getMessageId() == id).findFirst().get();
+    }
+
+    public static void dispose(Message message) {
+        messages.remove(message);
     }
 }
