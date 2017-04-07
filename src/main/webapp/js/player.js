@@ -18,11 +18,16 @@ setInterval(function () {
     });
 }, 1500);
 
+var formsubmit = function () {
+    create();
+    return false;
+}
+
 var create = function () {
     if (myPlayerId)
         return;
     var playername = $("#name").val();
-    console.log(playername);
+    console.log("playername: " + playername);
     var ajaxResult = $.ajax({
         type: 'POST',
         url: 'players',
@@ -32,6 +37,7 @@ var create = function () {
             myPlayerId = result.id;
             console.log("may player id set to " + myPlayerId);
             addplayer(result);
+            $("#registration").hide();
         }
     });
 };
