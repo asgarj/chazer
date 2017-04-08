@@ -46,7 +46,7 @@ function move(event) {
                     removeAttributeOfPlayer(player2);
                     if (result.message) {
                         showLast(event.srcElement);
-                        alert(result.message);
+                        gameOver(result.message);
                     } else {
                         player1 = result.player1;
                         player2 = result.player2;
@@ -162,7 +162,17 @@ function removeAttributeOfPlayer(player) {
     var cellid = document.getElementById(row + ":" + col);
     cellid.removeAttribute('style');
 }
-                  
-                  
-                  
-                  
+
+function gameOver (message) {
+    var node = document.createElement('div');
+    node.className = 'alert alert-info';
+    node.textContent = message;
+    var linkToHomepage = document.createElement('a');
+    linkToHomepage.setAttribute("href", "/");
+    linkToHomepage.className = "alert-link";
+    linkToHomepage.textContent = "click to return home";
+    linkToHomepage.setAttribute("style", "margin-left: 10px");
+    node.appendChild(linkToHomepage);
+    var container = document.getElementsByClassName('container')[0];
+    container.insertBefore(node, container.firstChild);
+}

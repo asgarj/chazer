@@ -43,8 +43,8 @@ var create = function () {
 };
 
 var addplayer = function (player) {
-    var listItem = '<li id=' + player.id + ' class="list-group-item col-md-6 col-md-offset-2">' + 
-        '<span>' + player.name + '</span>' + 
+    var listItem = '<li id=' + player.id + ' class="list-group-item col-md-6 col-md-offset-2">' +
+        '<span>' + player.name + '</span>' +
         '<button class="col-md-2 btn-sm btn-success pull-right" onclick="requestGame(' + player.id + ')">Play!</button>' +
         '</li>';
     $('#players').append(listItem);
@@ -58,6 +58,7 @@ var addplayer = function (player) {
             if (pos > -1) {
                 myPlayerId = c.split("=")[1].trim();
                 console.log("myPlayerId read from cookie:_"+myPlayerId+"_");
+                $("#registration").hide();
                 return;
             }
         });

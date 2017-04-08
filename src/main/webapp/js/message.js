@@ -54,6 +54,10 @@ var rejectRequest = function(messageId) {
 }
 
 var requestGame = function (opponentId) {
+    if (opponentId == myPlayerId) {
+        alert("You can't play with yourself");
+        return;
+    }
     $.ajax('/messages/request/' + myPlayerId + '/' + opponentId, {
         type: 'GET',
         dataType: 'json',
