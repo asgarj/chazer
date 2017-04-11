@@ -1,5 +1,6 @@
 package org.javadov.catmouse.rest;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.client.Client;
@@ -15,6 +16,7 @@ import java.util.logging.*;
 /**
  * Created by asgar on 3/29/17.
  */
+
 public class CatMouseTestsHelper {
     private static final String LOG_TEST_FILE = "/logging.properties";
     private static Logger logger = Logger.getLogger("Cat-Mouse-Game-Test");
@@ -33,6 +35,7 @@ public class CatMouseTestsHelper {
     }
 
     @Test
+    @Ignore
     public void generatePlayer() {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(UriBuilder.fromUri("http://localhost:2005")).path("players");

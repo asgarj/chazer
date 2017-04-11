@@ -1,5 +1,6 @@
 package org.javadov.catmouse.rest;
 
+import javafx.scene.media.MediaPlayer;
 import org.javadov.catmouse.model.Player;
 
 import javax.ws.rs.*;
@@ -34,6 +35,14 @@ public class PlayerService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getActivePlayers() {
         return Response.ok(players, MediaType.APPLICATION_JSON_TYPE).build();
+    }
+
+    @DELETE
+    @Path("/{playerId}")
+    public Response deletePlayer(@PathParam("playerId") int playerId) {
+        Player player = PlayerService.getPlayerById(playerId);
+        PlayerService.dispose(player);
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     static Player getPlayerById(int id) {

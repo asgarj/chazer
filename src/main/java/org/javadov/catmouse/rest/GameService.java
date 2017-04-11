@@ -67,7 +67,6 @@ public class GameService {
         if (game == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        logger.fine(format("jsonStr %s : thread-name [%s]", jsonString, Thread.currentThread().getName()));
         JsonObject json = Json.createReader(new StringReader(jsonString)).readObject();
         int row = json.getInt("row");
         int col = json.getInt("col");

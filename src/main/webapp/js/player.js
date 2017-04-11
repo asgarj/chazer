@@ -10,7 +10,7 @@ setInterval(function () {
             if (players.length === 0) {
                 $("#game").textContent = "No Players yet...";
             }
-            document.getElementById("players").innerHTML='';
+            //document.getElementById("players").innerHTML='';
             players.forEach(function (player) {
                 addplayer(player);
             });
@@ -43,6 +43,8 @@ var create = function () {
 };
 
 var addplayer = function (player) {
+    if (document.getElementById('' + player.id))
+        return;
     var listItem = '<li id=' + player.id + ' class="list-group-item col-md-6 col-md-offset-2">' +
         '<span>' + player.name + '</span>' +
         '<button class="col-md-2 btn-sm btn-success pull-right" onclick="requestGame(' + player.id + ')">Play!</button>' +

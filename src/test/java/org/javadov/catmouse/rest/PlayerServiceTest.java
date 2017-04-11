@@ -1,6 +1,7 @@
 package org.javadov.catmouse.rest;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.client.Client;
@@ -27,6 +28,7 @@ public class PlayerServiceTest {
     }
 
     @Test
+    @Ignore
     public void createPlayer() throws Exception {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(UriBuilder.fromUri("http://localhost:2005")).path("newplayer");
@@ -48,6 +50,7 @@ public class PlayerServiceTest {
     }
 
     @Test
+    @Ignore
     public void testStaticHtmlFiles() {
         Client client = ClientBuilder.newClient();
         WebTarget webTarget = client.target(UriBuilder.fromUri("http://localhost:2005"));

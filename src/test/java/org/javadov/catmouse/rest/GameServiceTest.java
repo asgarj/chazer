@@ -1,5 +1,6 @@
 package org.javadov.catmouse.rest;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.json.Json;
@@ -32,6 +33,7 @@ public class GameServiceTest {
     }
 
     @Test
+    @Ignore
     public void handle() throws Exception {
         //CatMouseTestsHelper.addDummyPlayers();
         Client client = ClientBuilder.newClient();

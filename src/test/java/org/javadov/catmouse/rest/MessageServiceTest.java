@@ -1,6 +1,7 @@
 package org.javadov.catmouse.rest;
 
 import org.javadov.catmouse.model.Message;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.client.Client;
@@ -19,6 +20,7 @@ public class MessageServiceTest {
     final String PATH = "messages";
 
     @Test
+    @Ignore
     public void requestGameTest() {
         //CatMouseTestsHelper.addDummyPlayers();
         Client client = ClientBuilder.newClient();
