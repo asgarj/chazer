@@ -76,6 +76,9 @@
               <directory>src/main/webapp</directory>
               <targetPath>META-INF/resources</targetPath>
           </resource>
+          <resource>
+              <directory>src/main/resources</directory>
+          </resource>
       </resources>
       <plugins>
           <plugin>
@@ -90,26 +93,47 @@
           </plugin>
           <plugin>
               <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-assembly-plugin</artifactId>
+              <artifactId>maven-dependency-plugin</artifactId>
+              <executions>
+                  <execution>
+                      <id>copy-dependencies</id>
+                      <phase>prepare-package</phase>
+                      <goals>
+                          <goal>copy-dependencies</goal>
+                      </goals>
+                      <configuration>
+                          <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                          <overWriteReleases>false</overWriteReleases>
+                          <overWriteSnapshots>false</overWriteSnapshots>
+                          <overWriteIfNewer>true</overWriteIfNewer>
+                      </configuration>
+                  </execution>
+              </executions>
+          </plugin>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-jar-plugin</artifactId>
               <configuration>
-                  <descriptorRefs>
-                      <descriptorRef>jar-with-dependencies</descriptorRef>
-                  </descriptorRefs>
-                  <finalName>${project.build.finalName}-${project.version}</finalName>
+                  <!--<descriptorRefs>-->
+                      <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
+                  <!--</descriptorRefs>-->
+                  <!--<finalName>${project.build.finalName}-${project.version}</finalName>-->
                   <archive>
                       <manifest>
                           <mainClass>org.javadov.catmouse.CatMouseGame</mainClass>
+                          <addClasspath>true</addClasspath>
+                          <classpathPrefix>lib/</classpathPrefix>
                       </manifest>
                   </archive>
               </configuration>
-              <executions>
-                  <execution>
-                      <phase>package</phase>
-                      <goals>
-                          <goal>single</goal>
-                      </goals>
-                  </execution>
-              </executions>
+              <!--<executions>-->
+                  <!--<execution>-->
+                      <!--<phase>package</phase>-->
+                      <!--<goals>-->
+                          <!--&lt;!&ndash;<goal>single</goal>&ndash;&gt;-->
+                      <!--</goals>-->
+                  <!--</execution>-->
+              <!--</executions>-->
           </plugin>
           <plugin>
               <groupId>org.eclipse.jetty</groupId>

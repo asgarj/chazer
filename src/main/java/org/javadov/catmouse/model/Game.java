@@ -50,6 +50,20 @@ public class Game {
         return player;
     }
 
+    public boolean isAllowedToMove(int playerId) {
+        Player me = this.getSelf(playerId);
+        Player opponent = this.getOpponent(playerId);
+        return me.getState().getStep() <= opponent.getState().getStep();
+    }
+
+    private Player getSelf(int playerId) {
+        return playerId == player1.getId() ? player1 : player2;
+    }
+
+    private Player getOpponent(int playerId) {
+        return playerId == player1.getId() ? player2 : player1;
+    }
+
     public boolean isOver() {
         return player1.getState().equals(player2.getState());
     }

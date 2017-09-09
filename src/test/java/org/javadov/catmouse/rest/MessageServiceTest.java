@@ -1,6 +1,7 @@
 package org.javadov.catmouse.rest;
 
 import org.javadov.catmouse.model.Message;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.client.Client;
@@ -9,6 +10,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -19,6 +21,7 @@ public class MessageServiceTest {
     final String PATH = "messages";
 
     @Test
+    @Ignore
     public void requestGameTest() {
         //CatMouseTestsHelper.addDummyPlayers();
         Client client = ClientBuilder.newClient();
@@ -50,5 +53,16 @@ public class MessageServiceTest {
         //messages = response.readEntity(List.class);
         //System.out.println(MessageService.messages);
         //assertEquals(1, messages.size());
+    }
+
+    @Test
+    public void testInbox() {
+        WebTarget webTarget = ClientBuilder.newClient().target(BASE_URL).path(PATH).path("inbox").path("1");
+        Response response = webTarget.request(MediaType.APPLICATION_JSON_TYPE).get();
+        List<LinkedHashMap> inbox = response.readEntity(List.class);
+        System.out.println(inbox.size());
+        System.out.println(inbox.isEmpty());
+        int mId = (int) inbox.get(0).get("messageId");
+        System.out.println(mId);
     }
 }

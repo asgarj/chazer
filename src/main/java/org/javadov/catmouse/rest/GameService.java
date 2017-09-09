@@ -1,20 +1,6 @@
 package org.javadov.catmouse.rest;
 
-import org.javadov.catmouse.model.Game;
-import org.javadov.catmouse.model.Message;
-import org.javadov.catmouse.model.Player;
-import static org.javadov.catmouse.CatMouseGame.logger;
-
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import java.io.StringReader;
-import static java.lang.String.format;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -22,6 +8,20 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import static java.lang.String.format;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import javax.json.Json;
+import javax.json.JsonObject;
+
+import static org.javadov.catmouse.CatMouseGame.logger;
+import org.javadov.catmouse.model.Game;
+import org.javadov.catmouse.model.Message;
+import org.javadov.catmouse.model.Player;
+
 
 /**
  * Created by asgar on 4/1/17.
@@ -42,6 +42,7 @@ public class GameService {
         msgToGame.put(message.getMessageId(), game);
         logger.info(String.format("Created new game for players %d - %d with id:%d",
                 game.getPlayer1().getId(), game.getPlayer2().getId(), game.getId()));
+        MessageService.dispose(message);
 
         return game;
     }
@@ -66,11 +67,14 @@ public class GameService {
         if (game == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-
+//        logger.fine(playerId+""+jsonString);
         JsonObject json = Json.createReader(new StringReader(jsonString)).readObject();
         int row = json.getInt("row");
         int col = json.getInt("col");
 
+        if (!game.isAllowedToMove(playerId)) {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
         Player player = game.takeAction(playerId, row, col);
         logger.info(format("%s MOVED TO (%d, %d)", player.getName(), row, col));
         if (game.isOver()) {
@@ -112,8 +116,6 @@ public class GameService {
     }
 
     static void dispose(Game game) {
-        PlayerService.dispose(game.getPlayer1());
-        PlayerService.dispose(game.getPlayer2());
         games.remove(game.getId());
         game = null;
     }

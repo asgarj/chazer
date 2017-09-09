@@ -1,9 +1,12 @@
 package org.javadov.catmouse.rest;
 
+import javafx.scene.media.MediaPlayer;
 import org.javadov.catmouse.model.Player;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +22,13 @@ public class PlayerService {
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Player createPlayer(String name) {
+    public Response createPlayer(String name) {
         Player newPlayer = Player.createPlayer(name);
         players.add(newPlayer);
-        return newPlayer;
+        NewCookie cookie = new NewCookie("playerId", "" + newPlayer.getId(), "/", null, null, 8*60*60, false);
+        return Response.ok(newPlayer, MediaType.APPLICATION_JSON_TYPE)
+                .cookie(cookie)
+                .build();
     }
 
     @GET
@@ -31,7 +37,15 @@ public class PlayerService {
         return Response.ok(players, MediaType.APPLICATION_JSON_TYPE).build();
     }
 
-    static Player getPlayerById(int id) {
+    @DELETE
+    @Path("/{playerId}")
+    public Response deletePlayer(@PathParam("playerId") int playerId) {
+        Player player = PlayerService.getPlayerById(playerId);
+        PlayerService.dispose(player);
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    public static Player getPlayerById(int id) {
         Optional<Player> player = players.stream().filter(p -> p.getId() == id).findFirst();
         return player.orElse(null);
     }

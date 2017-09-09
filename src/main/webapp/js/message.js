@@ -54,6 +54,14 @@ var rejectRequest = function(messageId) {
 }
 
 var requestGame = function (opponentId) {
+    if (opponentId == myPlayerId) {
+        alert("You can't play with yourself");
+        return;
+    }
+
+    $("#" + opponentId).find("button").attr("class", "col-md-2 btn-sm btn-default pull-right");
+    $("#" + opponentId).find("button").text("requesting...");
+
     $.ajax('/messages/request/' + myPlayerId + '/' + opponentId, {
         type: 'GET',
         dataType: 'json',
@@ -63,13 +71,13 @@ var requestGame = function (opponentId) {
         },
         error: function(xhr, status, errorThrown) {
             console.log("xhr.status: " + xhr.status);
-            if (xhr.status === 403) {
-                alert("Bad request");
-            }
+            $("#" + opponentId).find("button").attr("class", "col-md-2 btn-sm btn-success pull-right");
+            $("#" + opponentId).find("button").text("Play!");
+            console.log("opponent refused to play");
         },
         statusCode: {
             403: function() {
-                alert("403 is caught.");
+                //alert("403 is caught.");
             },
             201: function(data, status, jqXHR) {
                 console.log(data);

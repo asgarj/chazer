@@ -1,5 +1,6 @@
 package org.javadov.catmouse.rest;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.json.Json;
@@ -32,6 +33,7 @@ public class GameServiceTest {
     }
 
     @Test
+    @Ignore
     public void handle() throws Exception {
         //CatMouseTestsHelper.addDummyPlayers();
         Client client = ClientBuilder.newClient();
@@ -48,6 +50,11 @@ public class GameServiceTest {
 
     @Test
     public void moveTo() throws Exception {
+        JsonObject json = Json.createReader(new StringReader("{\"row\":1,\"col\":3}")).readObject();
+        int row = json.getInt("row");
+        int col = json.getInt("col");
+        assertEquals(1, row);
+        assertEquals(3, col);
     }
 
 }
