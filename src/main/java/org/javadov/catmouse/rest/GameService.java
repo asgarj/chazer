@@ -67,6 +67,7 @@ public class GameService {
         if (game == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+//        logger.fine(playerId+""+jsonString);
         JsonObject json = Json.createReader(new StringReader(jsonString)).readObject();
         int row = json.getInt("row");
         int col = json.getInt("col");

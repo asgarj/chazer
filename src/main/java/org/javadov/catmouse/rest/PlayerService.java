@@ -45,7 +45,7 @@ public class PlayerService {
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    static Player getPlayerById(int id) {
+    public static Player getPlayerById(int id) {
         Optional<Player> player = players.stream().filter(p -> p.getId() == id).findFirst();
         return player.orElse(null);
     }

@@ -9,6 +9,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.javadov.catmouse.model.Player;
+import org.javadov.catmouse.model.ServerPlayer;
 import sun.rmi.runtime.Log;
 
 import java.io.IOException;
@@ -43,7 +44,7 @@ public final class CatMouseGame {
         }
         logger.setUseParentHandlers(false);
         logger.addHandler(new FileHandler());
-        Thread.setDefaultUncaughtExceptionHandler((t, e) -> logger.severe(e.getMessage()));
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> logger.severe(e.getStackTrace()[0].getMethodName()+" : "+e.getMessage()));
         try (InputStream is = CatMouseGame.class.getResourceAsStream(APP_CONFIG)) {
             Properties props = new Properties();
             props.load(is);
@@ -83,6 +84,10 @@ public final class CatMouseGame {
 
         try {
             server.start();
+            new Thread(() -> {
+                ServerPlayer player = new ServerPlayer("Computer");
+                while (true) player.awaitGame();
+            }).start();
             server.join();
         } catch (Exception e) {
             System.out.println("EXCEPTION OCCURRED!");
